@@ -42,10 +42,10 @@ std::string FetchManifest(const std::string& url) {
 }
 
 int main() {
-    std::string manifestUrl = "https://siyargame.de/manifest/manifest.json"; // Replace with the actual URL
+    std::string manifestUrl = "https://siyargame.de/manifest/manifest.json"; // url to check for updates
     std::string manifest = FetchManifest(manifestUrl);
 
-    std::cout << "Manifest data:" << std::endl;
+    std::cout << "Manifest data:" << std::endl; 
     std::cout << manifest << std::endl;
 
     return 0;
