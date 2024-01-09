@@ -1,0 +1,11 @@
+{
+    "mods": [
+        {
+            "name": "LCMods",
+            "version": "1.0.0",
+            "url": "https://siyargame.de/downloads/LC-Update/LCMods.zip",
+            "checksum": "259778329D4F1F42B1CCDE64B8BABCC6"
+
+        }
+    ]
+}
