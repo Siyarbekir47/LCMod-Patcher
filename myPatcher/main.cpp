@@ -22,8 +22,6 @@ size_t WriteData(void* ptr, size_t size, size_t nmemb, std::ofstream* outFile) {
 }
 
 
-
-
 bool DownloadFile(const std::string& url, const std::string& localPath) {
     CURL* curl;
     std::ofstream file;
@@ -84,8 +82,6 @@ bool UpdateFile(const std::string& oldFilePath, const std::string& newFilePath)
 
 }
 
-
-
 bool createFolderIfNotExist(const std::string& folderPath)
 {
     try
@@ -121,15 +117,47 @@ bool createFolderIfNotExist(const std::string& folderPath)
 }
  
 
+nlohmann::json parseManifest(const std::string& manifestFilePath)
+{
+    std::ifstream manifestStream(manifestFilePath);
+    if (!manifestStream.is_open()) {
+        throw std::runtime_error("Failed to open manifest file");
+    }
+    nlohmann::json manifestJson;
+    manifestStream >> manifestJson;
+    return manifestJson;
+}
+
+
+
+void processManifest(const nlohmann::json& manifestJson)
+{
+    for (const auto& fileEntry : manifestJson["mods"]) {
+        std::string fileName = fileEntry["name"];
+        std::string fileUrl = fileEntry["url"];
+        std::string fileVersion = fileEntry["version"];
+        std::string fileChecksum = fileEntry["checksum"];
+        std::cout << "Processing file: " << fileName << std::endl;
+    }
+}
+
 int main()
 {
 
     std::string manifestUrl = "https://siyargame.de/manifest/manifest.json"; // url to check for updates
 
     std::string folderPath = "update/";
-
+    std::string manifestPath = "update/manifest.json";
     createFolderIfNotExist(folderPath);
-    DownloadFile(manifestUrl, "update/manifest.json");
+    DownloadFile(manifestUrl, manifestPath);
+    try {
+        nlohmann::json manifestJson = parseManifest(manifestPath);
+        processManifest(manifestJson);
+    }
+    catch (const std::exception& e) {
+		std::cerr << "Error: " << e.what() << std::endl;
+        return 1;
+	}
 
 
 
